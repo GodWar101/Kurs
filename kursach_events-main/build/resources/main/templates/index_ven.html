@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Место</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        body {
+            background-image: url('/images/3.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        h1, h4, h5, th, tr {
+            color: white;
+        }
+
+        .table th, .table td {
+            color: white;
+        }
+        .table tr:hover th, .table tr:hover td {
+            color: black;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #121c33">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/admin_dashboard}">Регистратура поликлиники</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link active" th:href="@{/admin_dashboard}">Регистратура</a></li>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/login}">Вход</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <h1 class="text-center">Поликлиники</h1>
+    <table id="venueTable" class="table table-striped table-hover text-light">
+        <thead>
+        <tr>
+            <th scope="col" onclick="sortTable(0)" style="cursor: pointer">ID</th>
+            <th scope="col">Название</th>
+            <th scope="col">Адрес</th>
+            <th scope="col">Вместимость</th>
+            <th scope="col">Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="venue : ${venues}">
+            <th scope="row" th:text="${venue.id}">ID отсутствует</th>
+            <td th:text="${venue.name}">Название отсутствует</td>
+            <td th:text="${venue.address}">Адрес отсутствует</td>
+            <td th:text="${venue.capacity}">Вместимость отсутствует</td>
+            <td>
+                <a th:href="@{'/venues/edit_venue/' + ${venue.id}}">
+                    <button type="button" class="btn btn-outline-dark" style="background-color: #87fa96">Редактировать</button>
+                </a>
+                <a th:href="@{'/venues/delete_venue/' + ${venue.id}}">
+                    <button type="button" class="btn btn-outline-dark" style="background-color: #ff7b7b">Удалить</button>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="text-center">
+        <a href="/venues/new_venue">
+            <button type="button" class="btn btn-outline-dark" style="background-color: lightskyblue">Добавить поликлинику</button>
+        </a>
+    </div>
+</div>
+</body>
+</html>

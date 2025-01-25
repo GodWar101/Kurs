@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистратура поликлиники</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        body {
+            background-image: url('/images/3.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        h1, h4, h5, th, tr {
+            color: white;
+        }
+
+        .table th, .table td {
+            color: white;
+        }
+        .table tr:hover th, .table tr:hover td {
+            color: black;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark justify-content-between" style="background-color: #121c33">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/login}">Регистратура поликлиники</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link active" th:href="@{/events}">Регистратура</a></li>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/venues}">Поликлиники</a></li>
+<!--                <li class="nav-item"><a class="nav-link active" th:href="@{/sessions}">Сеансы</a></li>-->
+                <li class="nav-item"><a class="nav-link active" th:href="@{/about}">Об авторе</a></li>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/login}">Вход</a></li>
+            </ul>
+            <form class="form" th:action="@{/}">
+                <input type="search" class="form-control-sm" name="keyword" id="keyword" th:value="${keyword}"
+                       placeholder="Поиск" required/>
+                <input type="submit" class="btn btn-outline-light btn-sm" value="Поиск"/>
+                <input type="button" class="btn btn-outline-light btn-sm" value="Очистить" id="btnClear"
+                       onclick="clearSearch()"/>
+            </form>
+        </div>
+    </div>
+</nav>
+<br>
+<div class="container">
+    <h1 class="text-center">Записи</h1>
+    <table id="eventTable" class="table table-striped table-hover text-light">
+        <thead>
+        <tr>
+            <th scope="col" onclick="sortTable(0)" style="cursor: pointer">ID</th>
+            <th scope="col">Талон</th>
+            <th scope="col">Врач</th>
+            <th scope="col">Место</th>
+            <th scope="col">Дата</th>
+            <th scope="col">Время</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="event : ${events}">
+            <th scope="row" th:text="${event.id}">ID отсутствует</th>
+            <td th:text="${event.name}">Талон отсутствует</td>
+            <td th:text="${event.eventType}">Врач отсутствует</td>
+            <td th:text="${event.location}">Место отсутствует</td>
+            <td th:text="${event.startDate}">Дата отсутствует</td>
+            <td th:text="${event.endDate}">Дата отсутствует</td>
+            <td><a th:href="@{'/events/description/' + ${event.id}}">
+                <button type="button" class="btn btn-outline-light btn-sm">Детали</button>
+            </a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    function clearSearch() {
+        window.location = "[[@{/}]]";
+    }
+
+    function sortTable(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("eventsTable");
+        switching = true;
+        dir = "asc";
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                switchcount++;
+            } else {
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+</script>
+</body>
+</html>
